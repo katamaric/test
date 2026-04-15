@@ -18,39 +18,37 @@ import fr.visiplus.bab.repositories.UserRepository;
 
 @Service
 public class BookService {
-		
+
 	private BookRepository bookRepository;
 	private UserRepository userRepository;
-	
+
 	public BookService(
-			final BookRepository bookRepository, 
+			final BookRepository bookRepository,
 			final UserRepository userRepository) {
 		this.bookRepository = bookRepository;
 		this.userRepository = userRepository;
 	}
-	
+
 	public List<BookDTO> getAllBooks() {
 		return convert(bookRepository.findAll());
 	}
 
-	public Set<BookDTO> getBooksByUserId(final Long userId) {		
+	public Set<BookDTO> getBooksByUserId(final Long userId) {
 		User user = userRepository.getReferenceById(userId);
 		Set<BookDTO> books = new LinkedHashSet<BookDTO>();
 		user.getReservations().forEach((resa) -> {
-			if(!isNotGet(resa.getBook())) {
-				books.add(convert(resa.getBook()));
-			}
+			books.add(convert(resa.getBook()));
 		});
 		return books;
 	}
 
-	public List<BookDTO> getBookBookedButNotGet() {	
+	public List<BookDTO> getBookBookedButNotGet() {
 		return bookRepository.findAll().stream()
 				.filter((book) -> isNotGet(book))
 				.map((book) -> convert(book))
-				.collect(Collectors.toList());		
+				.collect(Collectors.toList());
 	}
-	
+
 	private boolean isNotGet(final Book book) {
 		boolean booked = book.getStatus().equals(BookStatus.BOOKED);
 		if (booked) {
@@ -58,17 +56,17 @@ public class BookService {
 			LocalDate today = LocalDate.now();
 
 			Period period = Period.between(bookedDate, today);
-			if(period.getYears() > 0 || period.getMonths() > 0 || period.getDays() > 21) {			
+			if (period.getYears() > 0 || period.getMonths() > 0 || period.getDays() > 21) {
 				return true;
-			}			
+			}
 		}
 		return false;
 	}
-	
+
 	private List<BookDTO> convert(final List<Book> books) {
-		return books.stream().map( (book) -> convert(book) ).collect(Collectors.toList());
+		return books.stream().map((book) -> convert(book)).collect(Collectors.toList());
 	}
-	
+
 	private BookDTO convert(final Book book) {
 		return new BookDTO(book.getId(), book.getName(), book.getDescription(), book.getStatus());
 	}

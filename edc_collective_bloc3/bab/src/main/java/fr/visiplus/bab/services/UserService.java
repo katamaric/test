@@ -31,14 +31,13 @@ public class UserService {
 		return Optional.ofNullable(userDTO);
 	}
 
-	private UserDTO convert(final User user) {		
+	private UserDTO convert(final User user) {
 		UserDTO userDTO = new UserDTO(user.getId(), user.getUsername());
 		userDTO.getReservations().addAll(
-				user.getReservations().stream().map((resa) -> convert(resa)).collect(Collectors.toList())
-				);
+				user.getReservations().stream().map((resa) -> convert(resa)).collect(Collectors.toList()));
 		return userDTO;
 	}
-	
+
 	private ReservationDTO convert(final Reservation reservation) {
 		BookDTO bookDTO = new BookDTO(
 				reservation.getBook().getId(),
@@ -47,6 +46,16 @@ public class UserService {
 				reservation.getBook().getStatus());
 		ReservationDTO resaDTO = new ReservationDTO(reservation.getId(), reservation.getDateResa(), bookDTO);
 		return resaDTO;
+	}
+
+	public UserDTO register(String username, String password) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+
+		user = userRepository.save(user);
+
+		return new UserDTO(user.getId(), user.getUsername());
 	}
 
 }

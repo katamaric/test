@@ -12,3 +12,6 @@ Ce projet présente la correction de bugs et l’amélioration prévu pour l'app
 
 - Ajouter le possibilité de inscrire et creer un compte via l'application
 - Ajouter un endpoint pour afficher tous les livres considerée comme "non-disponible" tel ques "BORROWED" et "BOOKED"
+
+# Note pour mes correcteurs 
+- J'ai écrit plus en détail sur chaque issue et en commentaire sur les pull requests correspondant à chaque issue traité et en cours, donc si vous pouvez prenez ça en compte aussi vu la limite de temps et le besoin de le faire en francaise.. :') ! Merci beaucoup !! 

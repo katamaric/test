@@ -19,34 +19,40 @@ import fr.visiplus.bab.services.ReservationService;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-	
+
 	private BookService bookService;
 	private ReservationService reservationService;
-	
+
 	public BookController(
 			final BookService bookService,
 			final ReservationService reservationService) {
 		this.bookService = bookService;
 		this.reservationService = reservationService;
-	}	
-	
+	}
+
 	@GetMapping
 	public List<BookDTO> getAllBooks() {
 		return bookService.getAllBooks();
 	}
-	
+
 	@GetMapping("/{userId}")
-	public Set<BookDTO> getBooksByUserId(@PathVariable(name = "userId") Long userId) {		
-		return bookService.getBooksByUserId(userId);		
+	public Set<BookDTO> getBooksByUserId(@PathVariable(name = "userId") Long userId) {
+		return bookService.getBooksByUserId(userId);
 	}
-	
+
 	@PostMapping("/reserve/{bookId}/{userId}")
-	public ResponseEntity<ReservationDTO> book(@PathVariable(name = "bookId") Long bookId, @PathVariable(name = "userId") Long userId) {		
+	public ResponseEntity<ReservationDTO> book(@PathVariable(name = "bookId") Long bookId,
+			@PathVariable(name = "userId") Long userId) {
 		try {
 			return ResponseEntity.ok(reservationService.bookByBookIdAndUserId(bookId, userId));
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}		
+		}
+	}
+
+	@GetMapping("/notget")
+	public List<BookDTO> getBookNotGet() {
+		return bookService.getBookBookedButNotGet();
 	}
 
 }
